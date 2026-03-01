@@ -1,38 +1,195 @@
-.App {
-  text-align: center;
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
+  color: #e5e7eb;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  transition: background-image 450ms ease;
 }
 
-.App-logo {
-  height: 40vmin;
+/* Background photos (put these in src/assets/) */
+body.theme-default { background-image: url("./assets/default.jpg"); }
+body.theme-clear   { background-image: url("./assets/clear.jpg"); }
+body.theme-cloud   { background-image: url("./assets/cloud.jpg"); }
+body.theme-rain    { background-image: url("./assets/rain.jpg"); }
+body.theme-snow    { background-image: url("./assets/snow.jpg"); }
+
+/* dark overlay for readability */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
   pointer-events: none;
+  z-index: -1;
+  background: linear-gradient(to bottom, rgba(2,6,23,0.72), rgba(2,6,23,0.68));
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
+/* App layout */
+.app {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
+}
+
+.app__header, .app__footer {
+  padding: 26px 16px;
+  text-align: center;
+}
+
+.app__header h1 { margin: 0 0 8px; letter-spacing: 0.4px; }
+.app__header p { margin: 0; opacity: 0.85; }
+
+.app__main {
+  width: 100%;
+  flex: 1;
+  display: flex;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  padding: 16px;
 }
 
-.App-link {
-  color: #61dafb;
+/* Glass panel */
+.weather {
+  width: 100%;
+  max-width: 980px;
+  display: grid;
+  gap: 16px;
+
+  padding: 18px;
+  border-radius: 22px;
+
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.14);
+  backdrop-filter: blur(14px);
+
+  box-shadow: 0 20px 60px rgba(0,0,0,0.35), 0 1px 0 rgba(255,255,255,0.06) inset;
+
+  position: relative;
+  overflow: hidden;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Gradient accents INSIDE the panel */
+.weather::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.55;
+  background:
+    radial-gradient(600px 200px at 20% 0%, rgba(56,189,248,0.25), transparent 60%),
+    radial-gradient(600px 200px at 80% 0%, rgba(99,102,241,0.25), transparent 60%);
+}
+
+.weather > * { position: relative; z-index: 1; }
+
+.weather__search {
+  background: rgba(0,0,0,0.20);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 18px;
+  padding: 16px;
+}
+
+.weather__label { display: block; font-weight: 800; }
+.weather__sub { margin: 4px 0 0; opacity: 0.75; font-size: 0.9rem; }
+
+.weather__topbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.weather__controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.weather__input {
+  flex: 1;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.16);
+  background: rgba(2,6,23,0.45);
+  color: #e5e7eb;
+  outline: none;
+}
+
+.weather__button {
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.16);
+  background: rgba(59,130,246,0.30);
+  color: #e5e7eb;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.weather__button--ghost { background: rgba(255,255,255,0.08); }
+.weather__button:disabled { opacity: 0.55; cursor: not-allowed; }
+
+.weather__error { margin: 12px 0 0; color: #fecaca; }
+
+.weather__chips { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.weather__chipsLabel { opacity: 0.75; font-size: 0.9rem; }
+
+.weather__chip, .weather__chipBtn {
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(0,0,0,0.25);
+  color: #e5e7eb;
+  border-radius: 999px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+
+.weather__chip:hover, .weather__chipBtn:hover { background: rgba(255,255,255,0.10); }
+
+.weather__content { display: grid; gap: 16px; }
+
+.card {
+  background: rgba(0,0,0,0.18);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 18px;
+  padding: 16px;
+}
+
+.card__top { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.card__title { margin: 0 0 6px; }
+.card__country { opacity: 0.85; font-weight: 700; }
+.card__desc { margin: 0; opacity: 0.85; text-transform: capitalize; }
+.card__icon { width: 72px; height: 72px; }
+
+.card__grid {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.stat {
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(2,6,23,0.35);
+}
+
+.stat__label { display: block; opacity: 0.8; font-size: 0.9rem; margin-bottom: 6px; }
+.stat__value { font-size: 1.25rem; font-weight: 900; }
+
+@media (max-width: 720px) {
+  .weather__controls { flex-direction: column; align-items: stretch; }
+  .weather__button { width: 100%; }
+  .weather__topbar { flex-direction: column; align-items: stretch; }
+  .card__grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 420px) {
+  .card__top { flex-direction: column; align-items: flex-start; }
+  .card__icon { width: 60px; height: 60px; }
 }

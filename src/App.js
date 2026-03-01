@@ -1,25 +1,21 @@
-import logo from './logo.svg';
-import './App.css';
+import Weather from "./components/Weather";
+import "./App.css";
 
-function App() {
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <div className="app">
+      <header className="app__header">
+        <h1>Forecastly</h1>
+        <p>Real-time weather insights, beautifully delivered.</p>
       </header>
+
+      <main className="app__main">
+        <Weather />
+      </main>
+
+      <footer className="app__footer">
+        <small>Data by OpenWeatherMap • Built with React + Axios</small>
+      </footer>
     </div>
   );
 }
-
-export default App;
