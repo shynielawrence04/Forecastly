@@ -14,7 +14,7 @@ export default function App() {
       </main>
 
       <footer className="app__footer">
-        <small>Data by OpenWeatherMap • Built with React + Axios</small>
+        <small>Data by OpenWeatherMap • Built with React + Axios @Shynie2026</small>
       </footer>
     </div>
   );
